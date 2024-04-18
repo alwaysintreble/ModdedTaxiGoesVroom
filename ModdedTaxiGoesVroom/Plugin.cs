@@ -31,6 +31,8 @@ public class Plugin : BaseUnityPlugin
             var buttonManager = new MenuButtonManager();
             On.MenuV2Element.UpdateTexts += buttonManager.UpdateTexts;
             On.MenuV2Script.MenuBack += buttonManager.MenuBack;
+            On.ModMaster.OnLevelStart += LevelManager.LevelStart;
+            var playerManager = new PlayerManager();
 
             var testMainMenu = new CustomMenu("test");
             testMainMenu.AddButton(new MenuButton(() => "Go Back", testMainMenu.GoBack, () => true));

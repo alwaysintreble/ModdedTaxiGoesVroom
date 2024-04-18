@@ -36,11 +36,11 @@ public class TeleportMenu : CustomMenu
             { "Morio's Mind", () => Teleport(Levels.Index.level_MoriosMind, Data.LevelId.L12_MoriosMind) },
             { "City", () => Teleport(Levels.Index.level_City, Data.LevelId.L9_City) },
             { "Gym", () => Teleport(Levels.Index.level_Gym, Data.LevelId.L6_Gym) },
-            { "Poop", () => Teleport(Levels.Index.level_PoopWorld, Data.LevelId.L7_PoopWorld) },
-            { "Sewers", () => Teleport(Levels.Index.level_Sewers, Data.LevelId.L8_Sewers) },
-            { "Castle", () => Teleport(Levels.Index.level_StarmanCastle, Data.LevelId.L13_StarmanCastle) },
+            { "Fecal Matters", () => Teleport(Levels.Index.level_PoopWorld, Data.LevelId.L7_PoopWorld) },
+            { "Flushed Away", () => Teleport(Levels.Index.level_Sewers, Data.LevelId.L8_Sewers) },
+            { "Observing", () => Teleport(Levels.Index.level_StarmanCastle, Data.LevelId.L13_StarmanCastle) },
             { "Moon", () => Teleport(Levels.Index.level_Moon, Data.LevelId.L15_Moon) },
-            { "Rocket", () => Teleport(Levels.Index.level_Rocket, Data.LevelId.L16_Rocket) }
+            { "Mosk's Rocket", () => Teleport(Levels.Index.level_Rocket, Data.LevelId.L16_Rocket) }
         };
     }
 
