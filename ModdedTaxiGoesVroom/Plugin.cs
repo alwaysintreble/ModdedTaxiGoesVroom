@@ -2,6 +2,7 @@
 using BepInEx;
 using BepInEx.Logging;
 using ModdedTaxiGoesVroom.Managers;
+using ModdedTaxiGoesVroom.Trainer;
 using ModdedTaxiGoesVroom.Utils;
 using MonoMod.Utils;
 
@@ -29,11 +30,11 @@ public class Plugin : BaseUnityPlugin
             orig(self);
             var buttonManager = new MenuButtonManager();
             On.MenuV2Element.UpdateTexts += buttonManager.UpdateTexts;
+            On.MenuV2Script.MenuBack += buttonManager.MenuBack;
 
-            var testMainMenu = new CustomMenu(CustomMenu.MenuType.MainMenu, "test");
+            var testMainMenu = new CustomMenu("test");
             testMainMenu.AddButton(new MenuButton(() => "Go Back", testMainMenu.GoBack, () => true));
-            var trainerMenu = new CustomMenu(CustomMenu.MenuType.PauseMenu, "Trainer");
-            trainerMenu.AddButton(new MenuButton(() => "Go Back", trainerMenu.GoBack, () => true));
+            var trainerMenu = new TrainerMenu();
             buttonManager.AddMainMenuButton(new MenuButton(() => "Hello World!", testMainMenu.LoadMenu, () => true));
             buttonManager.AddPauseMenuButton(new MenuButton(() => "Trainer", trainerMenu.LoadMenu, () => true));
         };

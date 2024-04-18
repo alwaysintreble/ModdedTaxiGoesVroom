@@ -35,27 +35,26 @@ public class MenuButtonManager
         {
             // 4 elements
             MenuV2Script.MainMenuKind.desktop_Normal or MenuV2Script.MainMenuKind.nonDesktop_Normal => 3 +
-                                                                             extraMainMenuButtons.Count(button => button.IsEnabled()),
+                extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 5 elements
             MenuV2Script.MainMenuKind.desktop_WithCheats or MenuV2Script.MainMenuKind.nonDesktop_WithCheats => 4 +
                 extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 6 elements
             MenuV2Script.MainMenuKind.desktop_WithDiscordWishlistButtons
                 or MenuV2Script.MainMenuKind.nonDesktop_WithDiscordWishlistButtons => 5 +
-                                                                         extraMainMenuButtons.Count(button => button.IsEnabled()),
+                extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 7 elements
             // can this even be hit?
             MenuV2Script.MainMenuKind.desktop_WIthDiscordWishlist_AndCheats
                 or MenuV2Script.MainMenuKind.nonDesktop_WIthDiscordWishlist_AndCheats => 6 +
-                                                                            extraMainMenuButtons.Count(button => button.IsEnabled()),
+                extraMainMenuButtons.Count(button => button.IsEnabled()),
             _ => indexquit
         };
     }
 
     private string[] GetMainMenuStrings(On.MenuV2Script.orig_MainMenuVoicesStringsGet orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.MainMenu } ||
-            CurrentMenu is { Type: CustomMenu.MenuType.Settings } && self.menuIndex.Equals(MenuV2Script.indexSettings))
+        if (CurrentMenu != null)
         {
             return CurrentMenu.GetMenuStrings();
         }
@@ -75,8 +74,7 @@ public class MenuButtonManager
 
     private void SelectMainMenuItem(On.MenuV2Script.orig__SelectMainMenu orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.MainMenu } ||
-            CurrentMenu is { Type: CustomMenu.MenuType.Settings } && self.menuIndex.Equals(MenuV2Script.indexSettings))
+        if (CurrentMenu != null)
         {
             CurrentMenu.SelectButton(self);
             return;
@@ -152,9 +150,7 @@ public class MenuButtonManager
 
     private string[] GetPauseMenuStrings(On.MenuV2Script.orig_PauseMenuVoicesStringsGet orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.PauseMenu } ||
-            CurrentMenu is { Type: CustomMenu.MenuType.PauseSettings } &&
-            self.menuIndex.Equals(MenuV2Script.indexPauseSettings))
+        if (CurrentMenu != null)
         {
             return CurrentMenu.GetMenuStrings();
         }
@@ -174,9 +170,7 @@ public class MenuButtonManager
 
     private void SelectPauseMenuItem(On.MenuV2Script.orig__SelectPauseMenu orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.PauseMenu } ||
-            CurrentMenu is { Type: CustomMenu.MenuType.PauseSettings } &&
-            self.menuIndex.Equals(MenuV2Script.indexPauseSettings))
+        if (CurrentMenu != null)
         {
             CurrentMenu.SelectButton(self);
             return;
@@ -266,5 +260,24 @@ public class MenuButtonManager
             textAnimator?.SetText(CurrentMenu.ToString(), false);
             break;
         }
+    }
+
+    public void MenuBack(On.MenuV2Script.orig_MenuBack orig, MenuV2Script self)
+    {
+        Plugin.BepinLogger.LogDebug("MenuBack called");
+        if (CurrentMenu != null)
+        {
+            var voiceIndex = CurrentMenu.OrigVoiceIndex;
+            CurrentMenu = CurrentMenu.RemoveMenu(self);
+            self.menuIndex = self.menuIndex switch
+            {
+                MenuV2Script.indexPauseMenu => MenuV2Script.indexPauseSettings,
+                MenuV2Script.indexMainMenu => MenuV2Script.indexSettings,
+                _ => self.menuIndex
+            };
+            orig(self);
+            self.voiceIndex = voiceIndex;
+        }
+        else orig(self);
     }
 }

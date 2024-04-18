@@ -5,34 +5,16 @@ using ModdedTaxiGoesVroom.Managers;
 
 namespace ModdedTaxiGoesVroom.Utils;
 
-public class CustomMenu
+public class CustomMenu(string title, int startIndex = 0)
 {
     private static readonly MethodInfo _menuInit =
         typeof(MenuV2Script).GetMethod("MenuVoicesInit", BindingFlags.NonPublic | BindingFlags.Instance);
 
-    public enum MenuType
-    {
-        MainMenu,
-        PauseMenu,
-        Settings,
-        PauseSettings,
-        Nested
-    }
-
-    public readonly MenuType Type;
-    private string title;
-    private int startingIndex;
-    public int origMenuIndex;
-    private int origVoiceIndex;
-    protected CustomMenu lastMenu;
-    private readonly List<MenuButton> buttons = [];
-
-    public CustomMenu(MenuType type, string title, int startIndex = 0)
-    {
-        Type = type;
-        startingIndex = startIndex;
-        this.title = title;
-    }
+    private int _origMenuIndex;
+    public int OrigVoiceIndex;
+    private CustomMenu _lastMenu;
+    private readonly List<MenuButton> _buttons = [];
+    public readonly int StartingIndex = startIndex;
 
     /// <summary>
     /// Adds a new button to the menu.
@@ -41,7 +23,7 @@ public class CustomMenu
     public void AddButton(MenuButton button)
     {
         Plugin.BepinLogger.LogMessage($"Registering button {button.GetText()}");
-        buttons.Add(button);
+        _buttons.Add(button);
     }
 
     /// <summary>
@@ -50,12 +32,12 @@ public class CustomMenu
     public void LoadMenu(MenuV2Script instance)
     {
         Plugin.BepinLogger.LogMessage($"loading menu {ToString()}");
-        lastMenu = MenuButtonManager.CurrentMenu;
+        _lastMenu = MenuButtonManager.CurrentMenu;
         MenuButtonManager.CurrentMenu = this;
+        _origMenuIndex = instance.menuIndex;
+        OrigVoiceIndex = instance.voiceIndex;
+        instance.voiceIndex = StartingIndex;
         _menuInit.Invoke(instance, []);
-        origMenuIndex = instance.menuIndex;
-        origVoiceIndex = instance.voiceIndex;
-        instance.voiceIndex = startingIndex;
     }
 
     /// <summary>
@@ -65,14 +47,14 @@ public class CustomMenu
     {
         try
         {
-            MenuButtonManager.CurrentMenu = lastMenu;
-            foreach (var button in buttons)
+            MenuButtonManager.CurrentMenu = _lastMenu;
+            foreach (var button in _buttons)
             {
                 button.CurrentIndex = -1;
             }
 
-            instance.menuIndex = origMenuIndex;
-            instance.voiceIndex = origVoiceIndex;
+            instance.menuIndex = _origMenuIndex;
+            instance.voiceIndex = OrigVoiceIndex;
             _menuInit?.Invoke(instance, []);
         }
         catch (Exception e)
@@ -81,21 +63,22 @@ public class CustomMenu
         }
     }
 
-    public CustomMenu RemoveMenu()
+    public CustomMenu RemoveMenu(MenuV2Script instance)
     {
-        GoBack(MenuV2Script.instance);
-        return lastMenu;
+        GoBack(instance);
+        return _lastMenu;
     }
 
     /// <summary>
     /// Clears this and all previous custom menus, resetting back to the base menu.
     /// </summary>
-    public void ClearMenus()
+    protected void ClearMenus(MenuV2Script instance = null)
     {
-        var previousMenu = RemoveMenu();
+        if (instance == null) instance = MenuV2Script.instance;
+        var previousMenu = RemoveMenu(instance);
         while (previousMenu != null)
         {
-            previousMenu = previousMenu.RemoveMenu();
+            previousMenu = previousMenu.RemoveMenu(instance);
         }
     }
 
@@ -108,11 +91,13 @@ public class CustomMenu
     {
         try
         {
-            Plugin.BepinLogger.LogMessage($"Getting strings for {ToString()}");
+            Plugin.BepinLogger.LogDebug($"Getting strings for {ToString()}");
             List<string> list = new List<string>();
-            foreach (var button in buttons)
+            foreach (var button in _buttons)
             {
-                if (button.IsEnabled()) list.Add(button.GetText());
+                var text = button.GetText();
+                Plugin.BepinLogger.LogDebug(text);
+                if (button.IsEnabled()) list.Add(text);
             }
 
             return list.ToArray();
@@ -130,10 +115,10 @@ public class CustomMenu
     /// <param name="self"></param>
     public void SelectButton(MenuV2Script self)
     {
-        Plugin.BepinLogger.LogMessage($"selected a button in {ToString()}");
+        Plugin.BepinLogger.LogMessage($"selected button in {ToString()}");
         Sound.Play_Unpausable("SoundMenuSelect");
         var curIndex = 0;
-        foreach (var button in buttons)
+        foreach (var button in _buttons)
         {
             if (button.IsEnabled())
             {

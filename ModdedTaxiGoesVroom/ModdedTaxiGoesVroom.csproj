@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net4.7</TargetFramework>
+        <TargetFramework>net47</TargetFramework>
         <Description>Modding Tools for Yellow Taxi Goes Vroom</Description>
         <Version>0.1.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
