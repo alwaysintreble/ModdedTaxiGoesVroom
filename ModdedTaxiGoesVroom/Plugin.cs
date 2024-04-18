@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BepInEx;
 using BepInEx.Logging;
 using ModdedTaxiGoesVroom.Managers;
@@ -28,15 +29,26 @@ public class Plugin : BaseUnityPlugin
         {
             self.ModEnableSet(true);
             orig(self);
-            var buttonManager = new MenuButtonManager();
-            On.MenuV2Element.UpdateTexts += buttonManager.UpdateTexts;
-            On.MenuV2Script.MenuBack += buttonManager.MenuBack;
+            var menuManager = new MenuManager();
+            On.MenuV2Element.UpdateTexts += menuManager.UpdateTexts;
+            On.MenuV2Script.MenuBack += menuManager.MenuBack;
 
             var testMainMenu = new CustomMenu("test");
             testMainMenu.AddButton(new MenuButton(() => "Go Back", testMainMenu.GoBack, () => true));
             var trainerMenu = new TrainerMenu();
-            buttonManager.AddMainMenuButton(new MenuButton(() => "Hello World!", testMainMenu.LoadMenu, () => true));
-            buttonManager.AddPauseMenuButton(new MenuButton(() => "Trainer", trainerMenu.LoadMenu, () => true));
+            menuManager.AddMainMenuButton(new MenuButton(() => "Hello World!", testMainMenu.LoadMenu, () => true));
+            testMainMenu.AddButton(new MenuButton("Text Prompt",
+                () => MenuHelpers.TextInput(
+                    "Test",
+                    text => BepinLogger.LogDebug(text),
+                    "This is a test prompt",
+                    "Hello World")));
+            testMainMenu.AddButton(new MenuButton("Ask Prompt",
+                () => MenuHelpers.AskYesNo(
+                    "Test",
+                    confirm => BepinLogger.LogDebug(confirm),
+                    "Would you like a cookie?")));
+            menuManager.AddPauseMenuButton(new MenuButton(() => "Trainer", trainerMenu.LoadMenu, () => true));
         };
     }
 

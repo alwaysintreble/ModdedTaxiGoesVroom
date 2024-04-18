@@ -16,7 +16,7 @@ public class PlayerManager
     public bool CanBackFlip = true;
     public bool CanDoubleBoost = true;
     public bool CanBounce = true;
-    private bool _stopPlayer = false;
+    private bool _stopPlayer;
 
     public PlayerManager()
     {

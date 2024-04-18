@@ -6,14 +6,14 @@ using ModdedTaxiGoesVroom.Utils;
 
 namespace ModdedTaxiGoesVroom.Managers;
 
-public class MenuButtonManager
+public class MenuManager
 {
     private readonly List<MenuButton> _extraMainMenuButtons = [];
     private readonly List<MenuButton> _extraPauseMenuButtons = [];
-    public static MenuButtonManager Instance;
+    public static MenuManager Instance;
     public static CustomMenu CurrentMenu = null;
 
-    public MenuButtonManager()
+    public MenuManager()
     {
         On.MenuV2Script._PauseMenuDefineVoiceIndexes += PauseMenuDefineVoiceIndexes;
         On.MenuV2Script.PauseMenuVoicesStringsGet += GetPauseMenuStrings;

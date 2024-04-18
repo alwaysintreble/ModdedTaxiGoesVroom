@@ -32,8 +32,8 @@ public class CustomMenu(string title, int startIndex = 0)
     public void LoadMenu(MenuV2Script instance)
     {
         Plugin.BepinLogger.LogMessage($"loading menu {ToString()}");
-        _lastMenu = MenuButtonManager.CurrentMenu;
-        MenuButtonManager.CurrentMenu = this;
+        _lastMenu = MenuManager.CurrentMenu;
+        MenuManager.CurrentMenu = this;
         _origMenuIndex = instance.menuIndex;
         OrigVoiceIndex = instance.voiceIndex;
         instance.voiceIndex = StartingIndex;
@@ -47,7 +47,7 @@ public class CustomMenu(string title, int startIndex = 0)
     {
         try
         {
-            MenuButtonManager.CurrentMenu = _lastMenu;
+            MenuManager.CurrentMenu = _lastMenu;
             foreach (var button in _buttons)
             {
                 button.CurrentIndex = -1;
