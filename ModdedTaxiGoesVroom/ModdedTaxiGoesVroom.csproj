@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net4.7</TargetFramework>
         <Description>Modding Tools for Yellow Taxi Goes Vroom</Description>
         <Version>0.1.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -29,6 +29,14 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
+    
+    <Target Name="Delete Extras" BeforeTargets="PostBuildEvent">
+        <ItemGroup>
+            <FilesToDelete Include="$(TargetDir)*"
+                           Exclude="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb"/>
+        </ItemGroup>
+        <Delete Files="@(FilesToDelete)"/>
+    </Target>
 
     <Target Name="ZipMod" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <ZipDirectory SourceDirectory="bin\Release\$(TargetFramework)"
@@ -37,10 +45,10 @@
     </Target>
 
     <ItemGroup>
-        <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0" />
-        <PackageReference Include="UnityEngine.Modules" Version="2020.3.48" IncludeAssets="compile" />
+        <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all"/>
+        <PackageReference Include="BepInEx.Core" Version="5.4.21"/>
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.0"/>
+        <PackageReference Include="UnityEngine.Modules" Version="2020.3.48" IncludeAssets="compile"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -61,17 +69,4 @@
         <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Yellow Taxi Goes Vroom\Yellow Taxi Goes Vroom_Data\Managed\Unity.TextMeshPro.dll</HintPath>
       </Reference>
     </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Assembly\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Assembly\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Assembly\**" />
-    </ItemGroup>
-
 </Project>
