@@ -19,12 +19,35 @@ public class TrainerMenu : CustomMenu
             break;
         }
         AddButton(new MenuButton(() => _allLevelsUnlocked ? "Lock All Levels" : "Unlock All Levels", ToggleLockedLevels));
-        AddButton(new MenuButton(() => Master.instance.DEBUG ? "Disable Debug" : "Enable Debug", ToggleDebug));
+        AddButton(new MenuButton(() => Master.instance.DEBUG ? "Disable Debug" : "Enable Debug",
+            () => Master.instance.DEBUG = !Master.instance.DEBUG));
         AddButton(new MenuButton(
             () => Master.instance.SHOW_TESTER_BUTTONS ? "Disable Inputs Overlay" : "Enable Inputs Overlay",
-            ToggleTesterButtons));
-        var playerManager = PlayerManager.Instance;
-        AddButton(new MenuButton(playerManager.GetDeathTrainerText, playerManager.ChangeDeathBehavior));
+            () => Master.instance.SHOW_TESTER_BUTTONS = !Master.instance.SHOW_TESTER_BUTTONS));
+        
+        AddPlayerManagementButtons();
+        AddLevelManagementButtons();
+    }
+
+    private void AddPlayerManagementButtons()
+    {
+        var playerManager = new PlayerManager();
+        AddButton(new MenuButton(() => playerManager.CanBoost ? "Disable FOW Boosting" : "Enable FOW Boosting",
+            () => playerManager.CanBoost = !playerManager.CanBoost));
+        AddButton(new MenuButton(() => playerManager.CanFlip ? "Disable FOW Cancel" : "Enable FOW Cancel",
+            () => playerManager.CanFlip = !playerManager.CanFlip));
+        // AddButton(new MenuButton(playerManager.CanBackFlip ? "Disable Backflip" : "Enable Backflip",
+        //     () => playerManager.CanBackFlip = !playerManager.CanBackFlip));
+        AddButton(new MenuButton(() => playerManager.CanBounce ? "Disable Bouncing": "Enable Bouncing",
+            () => playerManager.CanBounce = !playerManager.CanBounce));
+        AddButton(new MenuButton(() => playerManager.CanDoubleBoost ? "Disable Double Boosting" : "Enable Double Boosting",
+            () => playerManager.CanDoubleBoost = !playerManager.CanDoubleBoost));
+    }
+
+    private void AddLevelManagementButtons()
+    {
+        var levelManager = new LevelManager();
+        AddButton(new MenuButton(levelManager.GetDeathTrainerText, levelManager.ChangeDeathBehavior));
         AddButton(new MenuButton(LocalizationHelper.GoBackText, GoBack));
     }
 
@@ -35,15 +58,5 @@ public class TrainerMenu : CustomMenu
         {
             data.levelUnlocked = _allLevelsUnlocked;
         }
-    }
-
-    private void ToggleDebug()
-    {
-        Master.instance.DEBUG = !Master.instance.DEBUG;
-    }
-
-    private void ToggleTesterButtons()
-    {
-        Master.instance.SHOW_TESTER_BUTTONS = !Master.instance.SHOW_TESTER_BUTTONS;
     }
 }

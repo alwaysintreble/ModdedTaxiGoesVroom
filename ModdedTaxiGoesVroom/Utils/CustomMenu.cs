@@ -112,8 +112,8 @@ public class CustomMenu(string title, int startIndex = 0)
     /// <summary>
     /// execute the custom button's action
     /// </summary>
-    /// <param name="self"></param>
-    public void SelectButton(MenuV2Script self)
+    /// <param name="instance"></param>
+    public void SelectButton(MenuV2Script instance)
     {
         Plugin.BepinLogger.LogMessage($"selected button in {ToString()}");
         Sound.Play_Unpausable("SoundMenuSelect");
@@ -122,15 +122,16 @@ public class CustomMenu(string title, int startIndex = 0)
         {
             if (button.IsEnabled())
             {
-                if (self.voiceIndex == curIndex)
+                if (instance.voiceIndex == curIndex)
                 {
                     Plugin.BepinLogger.LogMessage($"pressed {button.GetText()}");
-                    button.OnClick(self);
+                    button.OnClick(instance);
                 }
 
                 curIndex++;
             }
         }
+        MenuInit.Invoke(instance, []);
     }
 
     public override string ToString()
