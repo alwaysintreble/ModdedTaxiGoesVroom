@@ -6,13 +6,13 @@ namespace ModdedTaxiGoesVroom.Trainer;
 
 public class TeleportMenu : CustomMenu
 {
-    private Dictionary<string, Action> portalMap;
+    private Dictionary<string, Action> _portalMap;
 
     public TeleportMenu() : base("Select Teleport Level")
     {
         BuildData();
 
-        foreach (var kvp in portalMap)
+        foreach (var kvp in _portalMap)
         {
             AddButton(new MenuButton(kvp.Key, kvp.Value));
         }
@@ -20,7 +20,7 @@ public class TeleportMenu : CustomMenu
 
     private void BuildData()
     {
-        portalMap = new Dictionary<string, Action>
+        _portalMap = new Dictionary<string, Action>
         {
             { "Morio's Lab", () => Teleport(Levels.Index.level_hub, Data.LevelId.Hub) },
             { "Morio's Island", () => Teleport(Levels.Index.level_MoriosHome, Data.LevelId.L3_MoriosHome) },

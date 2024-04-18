@@ -5,20 +5,20 @@ namespace ModdedTaxiGoesVroom.Trainer;
 
 public class TrainerMenu : CustomMenu
 {
-    private bool allLevelsUnlocked;
+    private bool _allLevelsUnlocked;
 
     public TrainerMenu() : base("Trainer")
     {
         var teleportMenu = new TeleportMenu();
         AddButton(new MenuButton("Teleport", teleportMenu.LoadMenu));
-        allLevelsUnlocked = true;
+        _allLevelsUnlocked = true;
         foreach (var data in Data.levelDataList)
         {
             if (data.levelUnlocked) continue;
-            allLevelsUnlocked = false;
+            _allLevelsUnlocked = false;
             break;
         }
-        AddButton(new MenuButton(() => allLevelsUnlocked ? "Lock All Levels" : "Unlock All Levels", ToggleLockedLevels));
+        AddButton(new MenuButton(() => _allLevelsUnlocked ? "Lock All Levels" : "Unlock All Levels", ToggleLockedLevels));
         AddButton(new MenuButton(() => Master.instance.DEBUG ? "Disable Debug" : "Enable Debug", ToggleDebug));
         AddButton(new MenuButton(
             () => Master.instance.SHOW_TESTER_BUTTONS ? "Disable Inputs Overlay" : "Enable Inputs Overlay",
@@ -30,10 +30,10 @@ public class TrainerMenu : CustomMenu
 
     private void ToggleLockedLevels()
     {
-        allLevelsUnlocked = !allLevelsUnlocked;
+        _allLevelsUnlocked = !_allLevelsUnlocked;
         foreach (var data in Data.levelDataList)
         {
-            data.levelUnlocked = allLevelsUnlocked;
+            data.levelUnlocked = _allLevelsUnlocked;
         }
     }
 

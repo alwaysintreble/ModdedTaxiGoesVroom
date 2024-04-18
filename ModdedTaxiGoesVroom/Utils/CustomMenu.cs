@@ -7,7 +7,7 @@ namespace ModdedTaxiGoesVroom.Utils;
 
 public class CustomMenu(string title, int startIndex = 0)
 {
-    private static readonly MethodInfo _menuInit =
+    private static readonly MethodInfo MenuInit =
         typeof(MenuV2Script).GetMethod("MenuVoicesInit", BindingFlags.NonPublic | BindingFlags.Instance);
 
     private int _origMenuIndex;
@@ -37,7 +37,7 @@ public class CustomMenu(string title, int startIndex = 0)
         _origMenuIndex = instance.menuIndex;
         OrigVoiceIndex = instance.voiceIndex;
         instance.voiceIndex = StartingIndex;
-        _menuInit.Invoke(instance, []);
+        MenuInit.Invoke(instance, []);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class CustomMenu(string title, int startIndex = 0)
 
             instance.menuIndex = _origMenuIndex;
             instance.voiceIndex = OrigVoiceIndex;
-            _menuInit?.Invoke(instance, []);
+            MenuInit?.Invoke(instance, []);
         }
         catch (Exception e)
         {

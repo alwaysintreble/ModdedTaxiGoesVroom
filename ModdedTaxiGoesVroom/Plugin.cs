@@ -8,10 +8,10 @@ using MonoMod.Utils;
 
 namespace ModdedTaxiGoesVroom;
 
-[BepInPlugin(PluginGUID, PluginName, PluginVersion)]
+[BepInPlugin(PluginGuid, PluginName, PluginVersion)]
 public class Plugin : BaseUnityPlugin
 {
-    public const string PluginGUID = "com.alwaysintreble.ModdedTaxi";
+    public const string PluginGuid = "com.alwaysintreble.ModdedTaxi";
     public const string PluginName = "ModdedTaxiGoesVroom";
     public const string PluginVersion = "0.1.0";
 
@@ -31,7 +31,7 @@ public class Plugin : BaseUnityPlugin
             var buttonManager = new MenuButtonManager();
             On.MenuV2Element.UpdateTexts += buttonManager.UpdateTexts;
             On.MenuV2Script.MenuBack += buttonManager.MenuBack;
-            On.ModMaster.OnLevelStart += LevelManager.LevelStart;
+            var levelManager = new LevelManager();
             var playerManager = new PlayerManager();
 
             var testMainMenu = new CustomMenu("test");
