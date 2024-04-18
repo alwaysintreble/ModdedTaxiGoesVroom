@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using RandoTaxiGoesVroom.Utils;
+using System.Reflection;
+using Febucci.UI;
+using ModdedTaxiGoesVroom.Utils;
 
-namespace RandoTaxiGoesVroom.Managers;
+namespace ModdedTaxiGoesVroom.Managers;
 
 public class MenuButtonManager
 {
@@ -33,29 +35,31 @@ public class MenuButtonManager
         {
             // 4 elements
             MenuV2Script.MainMenuKind.desktop_Normal or MenuV2Script.MainMenuKind.nonDesktop_Normal => 3 +
-                extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                             extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 5 elements
             MenuV2Script.MainMenuKind.desktop_WithCheats or MenuV2Script.MainMenuKind.nonDesktop_WithCheats => 4 +
                 extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 6 elements
             MenuV2Script.MainMenuKind.desktop_WithDiscordWishlistButtons
                 or MenuV2Script.MainMenuKind.nonDesktop_WithDiscordWishlistButtons => 5 +
-                extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                         extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 7 elements
             // can this even be hit?
             MenuV2Script.MainMenuKind.desktop_WIthDiscordWishlist_AndCheats
                 or MenuV2Script.MainMenuKind.nonDesktop_WIthDiscordWishlist_AndCheats => 6 +
-                extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                            extraMainMenuButtons.Count(button => button.IsEnabled()),
             _ => indexquit
         };
     }
 
     private string[] GetMainMenuStrings(On.MenuV2Script.orig_MainMenuVoicesStringsGet orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.MainMenu })
+        if (CurrentMenu is { Type: CustomMenu.MenuType.MainMenu } ||
+            CurrentMenu is { Type: CustomMenu.MenuType.Settings } && self.menuIndex.Equals(MenuV2Script.indexSettings))
         {
-            return CurrentMenu.GetMenuStrings(self);
+            return CurrentMenu.GetMenuStrings();
         }
+
         var ret = orig(self);
         var list = ret.ToList();
         var additionIndex = list.Count - 1;
@@ -71,11 +75,13 @@ public class MenuButtonManager
 
     private void SelectMainMenuItem(On.MenuV2Script.orig__SelectMainMenu orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.MainMenu })
+        if (CurrentMenu is { Type: CustomMenu.MenuType.MainMenu } ||
+            CurrentMenu is { Type: CustomMenu.MenuType.Settings } && self.menuIndex.Equals(MenuV2Script.indexSettings))
         {
             CurrentMenu.SelectButton(self);
             return;
         }
+
         switch (self.MainMenuKindGet())
         {
             // 4 elements
@@ -86,7 +92,7 @@ public class MenuButtonManager
                     Sound.Play_Unpausable("SoundMenuSelect");
                     foreach (var button in extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
-                        button.OnClick();
+                        button.OnClick(self);
                     }
 
                     return;
@@ -101,7 +107,7 @@ public class MenuButtonManager
                     Sound.Play_Unpausable("SoundMenuSelect");
                     foreach (var button in extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
-                        button.OnClick();
+                        button.OnClick(self);
                     }
 
                     return;
@@ -116,7 +122,7 @@ public class MenuButtonManager
                     Sound.Play_Unpausable("SoundMenuSelect");
                     foreach (var button in extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
-                        button.OnClick();
+                        button.OnClick(self);
                     }
 
                     return;
@@ -132,7 +138,7 @@ public class MenuButtonManager
                     Sound.Play_Unpausable("SoundMenuSelect");
                     foreach (var button in extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
-                        button.OnClick();
+                        button.OnClick(self);
                     }
 
                     return;
@@ -146,10 +152,13 @@ public class MenuButtonManager
 
     private string[] GetPauseMenuStrings(On.MenuV2Script.orig_PauseMenuVoicesStringsGet orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.PauseMenu })
+        if (CurrentMenu is { Type: CustomMenu.MenuType.PauseMenu } ||
+            CurrentMenu is { Type: CustomMenu.MenuType.PauseSettings } &&
+            self.menuIndex.Equals(MenuV2Script.indexPauseSettings))
         {
-            return CurrentMenu.GetMenuStrings(self);
+            return CurrentMenu.GetMenuStrings();
         }
+
         var ret = orig(self);
         var list = ret.ToList();
         var additionIndex = list.Count - 1;
@@ -165,11 +174,14 @@ public class MenuButtonManager
 
     private void SelectPauseMenuItem(On.MenuV2Script.orig__SelectPauseMenu orig, MenuV2Script self)
     {
-        if (CurrentMenu is { Type: CustomMenu.MenuType.PauseMenu })
+        if (CurrentMenu is { Type: CustomMenu.MenuType.PauseMenu } ||
+            CurrentMenu is { Type: CustomMenu.MenuType.PauseSettings } &&
+            self.menuIndex.Equals(MenuV2Script.indexPauseSettings))
         {
             CurrentMenu.SelectButton(self);
             return;
         }
+
         switch (self.PauseMenuKindGet())
         {
             // 4 elements
@@ -178,9 +190,10 @@ public class MenuButtonManager
                 if (self.voiceIndex >= 3 && self.voiceIndex < 3 + extraPauseMenuButtons.Count)
                 {
                     Sound.Play_Unpausable("SoundMenuSelect");
-                    foreach (var button in extraPauseMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
+                    foreach (var button in
+                             extraPauseMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
-                        button.OnClick();
+                        button.OnClick(self);
                     }
 
                     return;
@@ -192,9 +205,10 @@ public class MenuButtonManager
                 if (self.voiceIndex >= 4 && self.voiceIndex < 4 + extraPauseMenuButtons.Count)
                 {
                     Sound.Play_Unpausable("SoundMenuSelect");
-                    foreach (var button in extraPauseMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
+                    foreach (var button in
+                             extraPauseMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
-                        button.OnClick();
+                        button.OnClick(self);
                     }
 
                     return;
@@ -232,5 +246,25 @@ public class MenuButtonManager
     public void AddPauseMenuButton(MenuButton buttonToAdd)
     {
         extraPauseMenuButtons.Add(buttonToAdd);
+    }
+
+    public void UpdateTexts(On.MenuV2Element.orig_UpdateTexts orig)
+    {
+        Plugin.BepinLogger.LogDebug("update texts called");
+        orig();
+        if (CurrentMenu == null) return;
+        var textAnimatorField =
+            typeof(MenuV2Element).GetField("textAnimator", BindingFlags.NonPublic | BindingFlags.Instance);
+        var menuScrField = typeof(MenuV2Element).GetField("menuScr", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (menuScrField == null || textAnimatorField == null) return;
+        foreach (var element in MenuV2Element.list)
+        {
+            if (!element.isSubTitle) continue;
+            var menuScript = menuScrField.GetValue(element) as MenuV2Script;
+            if (menuScript == null) break;
+            var textAnimator = textAnimatorField.GetValue(element) as TextAnimator;
+            textAnimator?.SetText(CurrentMenu.ToString(), false);
+            break;
+        }
     }
 }

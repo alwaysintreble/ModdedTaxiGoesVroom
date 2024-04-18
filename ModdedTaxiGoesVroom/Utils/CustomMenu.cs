@@ -1,23 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
-using RandoTaxiGoesVroom.Managers;
+using ModdedTaxiGoesVroom.Managers;
 
-namespace RandoTaxiGoesVroom.Utils;
+namespace ModdedTaxiGoesVroom.Utils;
 
-public class CustomMenu(CustomMenu.MenuType type, int startIndex = 0)
+public class CustomMenu
 {
-    private static MethodInfo _menuInit =
+    private static readonly MethodInfo _menuInit =
         typeof(MenuV2Script).GetMethod("MenuVoicesInit", BindingFlags.NonPublic | BindingFlags.Instance);
+
     public enum MenuType
     {
         MainMenu,
-        PauseMenu
+        PauseMenu,
+        Settings,
+        PauseSettings,
+        Nested
     }
 
-    public readonly MenuType Type = type;
-    private int startingIndex = startIndex;
+    public readonly MenuType Type;
+    private string title;
+    private int startingIndex;
+    public int origMenuIndex;
+    private int origVoiceIndex;
+    protected CustomMenu lastMenu;
     private readonly List<MenuButton> buttons = [];
+
+    public CustomMenu(MenuType type, string title, int startIndex = 0)
+    {
+        Type = type;
+        startingIndex = startIndex;
+        this.title = title;
+    }
 
     /// <summary>
     /// Adds a new button to the menu.
@@ -28,29 +43,60 @@ public class CustomMenu(CustomMenu.MenuType type, int startIndex = 0)
         Plugin.BepinLogger.LogMessage($"Registering button {button.GetText()}");
         buttons.Add(button);
     }
-    
+
     /// <summary>
     /// Hooks this menu to be the currently loaded menu.
     /// </summary>
-    public void LoadMenu()
+    public void LoadMenu(MenuV2Script instance)
     {
         Plugin.BepinLogger.LogMessage($"loading menu {ToString()}");
+        lastMenu = MenuButtonManager.CurrentMenu;
         MenuButtonManager.CurrentMenu = this;
-        _menuInit.Invoke(MenuV2Script.instance, []);
-        MenuV2Script.instance.menuIndex = startingIndex;
+        _menuInit.Invoke(instance, []);
+        origMenuIndex = instance.menuIndex;
+        origVoiceIndex = instance.voiceIndex;
+        instance.voiceIndex = startingIndex;
     }
 
     /// <summary>
-    /// Removes this menu to return to either the regular or another menu.
+    /// Returns to the previous menu.
     /// </summary>
-    public void RemoveMenu()
+    public void GoBack(MenuV2Script instance)
     {
-        MenuButtonManager.CurrentMenu = null;
-        foreach (var button in buttons)
+        try
         {
-            button.CurrentIndex = -1;
+            MenuButtonManager.CurrentMenu = lastMenu;
+            foreach (var button in buttons)
+            {
+                button.CurrentIndex = -1;
+            }
+
+            instance.menuIndex = origMenuIndex;
+            instance.voiceIndex = origVoiceIndex;
+            _menuInit?.Invoke(instance, []);
         }
-        _menuInit.Invoke(MenuV2Script.instance, []);
+        catch (Exception e)
+        {
+            Plugin.BepinLogger.LogError(e);
+        }
+    }
+
+    public CustomMenu RemoveMenu()
+    {
+        GoBack(MenuV2Script.instance);
+        return lastMenu;
+    }
+
+    /// <summary>
+    /// Clears this and all previous custom menus, resetting back to the base menu.
+    /// </summary>
+    public void ClearMenus()
+    {
+        var previousMenu = RemoveMenu();
+        while (previousMenu != null)
+        {
+            previousMenu = previousMenu.RemoveMenu();
+        }
     }
 
     /// <summary>
@@ -58,10 +104,24 @@ public class CustomMenu(CustomMenu.MenuType type, int startIndex = 0)
     /// </summary>
     /// <param name="self"></param>
     /// <returns></returns>
-    public string[] GetMenuStrings(MenuV2Script self)
+    public string[] GetMenuStrings()
     {
-        Plugin.BepinLogger.LogMessage($"Getting strings for {ToString()}");
-        return (from button in buttons where button.IsEnabled() select button.GetText()).ToArray();
+        try
+        {
+            Plugin.BepinLogger.LogMessage($"Getting strings for {ToString()}");
+            List<string> list = new List<string>();
+            foreach (var button in buttons)
+            {
+                if (button.IsEnabled()) list.Add(button.GetText());
+            }
+
+            return list.ToArray();
+        }
+        catch (Exception e)
+        {
+            Plugin.BepinLogger.LogError(e);
+            return [$"{this}"];
+        }
     }
 
     /// <summary>
@@ -80,11 +140,16 @@ public class CustomMenu(CustomMenu.MenuType type, int startIndex = 0)
                 if (self.voiceIndex == curIndex)
                 {
                     Plugin.BepinLogger.LogMessage($"pressed {button.GetText()}");
-                    button.OnClick();
+                    button.OnClick(self);
                 }
 
                 curIndex++;
             }
         }
+    }
+
+    public override string ToString()
+    {
+        return title;
     }
 }
