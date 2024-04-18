@@ -38,7 +38,7 @@ public class TeleportMenu : CustomMenu
             { "Gym", () => Teleport(Levels.Index.level_Gym, Data.LevelId.L6_Gym) },
             { "Fecal Matters", () => Teleport(Levels.Index.level_PoopWorld, Data.LevelId.L7_PoopWorld) },
             { "Flushed Away", () => Teleport(Levels.Index.level_Sewers, Data.LevelId.L8_Sewers) },
-            { "Observing", () => Teleport(Levels.Index.level_StarmanCastle, Data.LevelId.L13_StarmanCastle) },
+            { "Ruined Observatory", () => Teleport(Levels.Index.level_StarmanCastle, Data.LevelId.L13_StarmanCastle) },
             { "Moon", () => Teleport(Levels.Index.level_Moon, Data.LevelId.L15_Moon) },
             { "Mosk's Rocket", () => Teleport(Levels.Index.level_Rocket, Data.LevelId.L16_Rocket) }
         };

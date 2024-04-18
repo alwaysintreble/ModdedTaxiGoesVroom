@@ -19,7 +19,7 @@ public class CustomMenu(string title, int startIndex = 0)
     /// <param name="button"></param>
     public void AddButton(MenuButton button)
     {
-        Plugin.BepinLogger.LogMessage($"Registering button {button.GetText()}");
+        Plugin.BepinLogger.LogDebug($"Registering button {button.GetText()}");
         _buttons.Add(button);
     }
 
@@ -28,7 +28,7 @@ public class CustomMenu(string title, int startIndex = 0)
     /// </summary>
     public void LoadMenu(MenuV2Script instance)
     {
-        Plugin.BepinLogger.LogMessage($"loading menu {ToString()}");
+        Plugin.BepinLogger.LogDebug($"loading menu {ToString()}");
         _lastMenu = MenuManager.CurrentMenu;
         MenuManager.CurrentMenu = this;
         _origMenuIndex = instance.menuIndex;
@@ -112,7 +112,6 @@ public class CustomMenu(string title, int startIndex = 0)
     /// <param name="instance"></param>
     public void SelectButton(MenuV2Script instance)
     {
-        Plugin.BepinLogger.LogMessage($"selected button in {ToString()}");
         Sound.Play_Unpausable("SoundMenuSelect");
         var curIndex = 0;
         foreach (var button in _buttons)
@@ -121,7 +120,7 @@ public class CustomMenu(string title, int startIndex = 0)
             {
                 if (instance.voiceIndex == curIndex)
                 {
-                    Plugin.BepinLogger.LogMessage($"pressed {button.GetText()}");
+                    Plugin.BepinLogger.LogDebug($"pressed {button.GetText()}");
                     button.OnClick(instance);
                 }
 

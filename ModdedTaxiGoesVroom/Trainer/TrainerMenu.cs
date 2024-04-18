@@ -9,8 +9,9 @@ public class TrainerMenu : CustomMenu
 
     public TrainerMenu() : base("Trainer")
     {
-        var teleportMenu = new TeleportMenu();
-        AddButton(new MenuButton("Teleport", teleportMenu.LoadMenu));
+        // var teleportMenu = new TeleportMenu();
+        // AddButton(new MenuButton("Teleport", teleportMenu.LoadMenu));
+        
         _allLevelsUnlocked = true;
         foreach (var data in Data.levelDataList)
         {
@@ -24,24 +25,11 @@ public class TrainerMenu : CustomMenu
         AddButton(new MenuButton(
             () => Master.instance.SHOW_TESTER_BUTTONS ? "Disable Inputs Overlay" : "Enable Inputs Overlay",
             () => Master.instance.SHOW_TESTER_BUTTONS = !Master.instance.SHOW_TESTER_BUTTONS));
-        
-        AddPlayerManagementButtons();
-        AddLevelManagementButtons();
-    }
 
-    private void AddPlayerManagementButtons()
-    {
-        var playerManager = new PlayerManager();
-        AddButton(new MenuButton(() => playerManager.CanBoost ? "Disable FOW Boosting" : "Enable FOW Boosting",
-            () => playerManager.CanBoost = !playerManager.CanBoost));
-        AddButton(new MenuButton(() => playerManager.CanFlip ? "Disable FOW Cancel" : "Enable FOW Cancel",
-            () => playerManager.CanFlip = !playerManager.CanFlip));
-        // AddButton(new MenuButton(playerManager.CanBackFlip ? "Disable Backflip" : "Enable Backflip",
-        //     () => playerManager.CanBackFlip = !playerManager.CanBackFlip));
-        AddButton(new MenuButton(() => playerManager.CanBounce ? "Disable Bouncing": "Enable Bouncing",
-            () => playerManager.CanBounce = !playerManager.CanBounce));
-        AddButton(new MenuButton(() => playerManager.CanDoubleBoost ? "Disable Double Boosting" : "Enable Double Boosting",
-            () => playerManager.CanDoubleBoost = !playerManager.CanDoubleBoost));
+        var controlsMenu = new PlayerControlsMenu();
+        AddButton(new MenuButton("Controls Restrictions", controlsMenu.LoadMenu));
+        
+        AddLevelManagementButtons();
     }
 
     private void AddLevelManagementButtons()

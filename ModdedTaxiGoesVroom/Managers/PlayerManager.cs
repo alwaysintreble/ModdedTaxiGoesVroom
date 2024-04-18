@@ -36,7 +36,7 @@ public class PlayerManager
 
     public void GetPlayerAttrs()
     {
-        if (ModMaster.instance == null || _playerBody != null) return;
+        if (PlayerScript.instance == null || _playerBody != null) return;
         _playerBody = ModMaster.instance.PlayerGetRigidbody();
         _playerScript = ModMaster.instance.PlayerGetInstance();
         _playerTransform = ModMaster.instance.PlayerGetTransform();
