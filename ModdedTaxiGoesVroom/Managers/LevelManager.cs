@@ -31,7 +31,7 @@ public class LevelManager
     private void LevelStart(On.ModMaster.orig_OnLevelStart orig, ModMaster self)
     {
         Plugin.BepinLogger.LogDebug("hi :)");
-        PlayerManager.Instance.GetPlayerAttrs();
+        // PlayerManager.Instance.GetPlayerAttrs();
         orig(self);
     }
 

@@ -26,11 +26,19 @@ public class PlayerManager
         On.ModMaster.OnPlayerFlipOWill_Interrupt += OnFlipInterrupt;
         On.ModMaster.OnPlayerBounce_Jump += OnBounceJump;
         On.PlayerScript.Start += OnPlayerStart;
+        On.PlayerScript.Awake += OnPlayerAwake;
         Instance = this;
+    }
+
+    private void OnPlayerAwake(On.PlayerScript.orig_Awake orig, PlayerScript self)
+    {
+        AssetManager.Instance.SkinLoaded = false;
+        orig(self);
     }
 
     private void OnPlayerStart(On.PlayerScript.orig_Start orig, PlayerScript self)
     {
+        Plugin.BepinLogger.LogDebug("player started");
         orig(self);
     }
 
@@ -40,6 +48,7 @@ public class PlayerManager
         _playerBody = ModMaster.instance.PlayerGetRigidbody();
         _playerScript = ModMaster.instance.PlayerGetInstance();
         _playerTransform = ModMaster.instance.PlayerGetTransform();
+        if (_playerScript == null) return;
     }
 
     private void OnFlip(On.ModMaster.orig_OnPlayerFlipOWill orig, ModMaster self)
