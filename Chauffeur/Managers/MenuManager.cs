@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Chauffer.Utils;
 using Febucci.UI;
-using ModdedTaxiGoesVroom.Utils;
 
-namespace ModdedTaxiGoesVroom.Managers;
+namespace Chauffer.Managers;
 
 public class MenuManager
 {
@@ -21,8 +21,14 @@ public class MenuManager
         On.MenuV2Script._MainMenuDefineVoiceIndexes += MainMenuDefineVoiceIndexes;
         On.MenuV2Script.MainMenuVoicesStringsGet += GetMainMenuStrings;
         On.MenuV2Script._SelectMainMenu += SelectMainMenuItem;
+        On.MenuV2Element.UpdateTexts += UpdateTexts;
+        On.MenuV2Script.MenuBack += MenuBack;
         Instance = this;
+        AddButtons?.Invoke();
     }
+    
+    public static event AddButton AddButtons;
+    public delegate void AddButton();
 
     private void MainMenuDefineVoiceIndexes(On.MenuV2Script.orig__MainMenuDefineVoiceIndexes orig, MenuV2Script self,
         MenuV2Script.MainMenuKind mkind, out int indexplay, out int indexwishlist, out int indexdiscord,
@@ -35,19 +41,19 @@ public class MenuManager
         {
             // 4 elements
             MenuV2Script.MainMenuKind.desktop_Normal or MenuV2Script.MainMenuKind.nonDesktop_Normal => 3 +
-                _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                             _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 5 elements
             MenuV2Script.MainMenuKind.desktop_WithCheats or MenuV2Script.MainMenuKind.nonDesktop_WithCheats => 4 +
                 _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 6 elements
             MenuV2Script.MainMenuKind.desktop_WithDiscordWishlistButtons
                 or MenuV2Script.MainMenuKind.nonDesktop_WithDiscordWishlistButtons => 5 +
-                _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                         _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 7 elements
             // can this even be hit?
             MenuV2Script.MainMenuKind.desktop_WIthDiscordWishlist_AndCheats
                 or MenuV2Script.MainMenuKind.nonDesktop_WIthDiscordWishlist_AndCheats => 6 +
-                _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                            _extraMainMenuButtons.Count(button => button.IsEnabled()),
             _ => indexquit
         };
     }
@@ -232,19 +238,29 @@ public class MenuManager
         };
     }
 
-    public void AddMainMenuButton(MenuButton buttonToAdd)
+    public static void AddMainMenuButton(MenuButton buttonToAdd)
     {
-        _extraMainMenuButtons.Add(buttonToAdd);
+        if (Instance == null)
+        {
+            Plugin.ChaufferLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
+            return;
+        }
+        Instance._extraMainMenuButtons.Add(buttonToAdd);
     }
 
-    public void AddPauseMenuButton(MenuButton buttonToAdd)
+    public static void AddPauseMenuButton(MenuButton buttonToAdd)
     {
-        _extraPauseMenuButtons.Add(buttonToAdd);
+        if (Instance == null)
+        {
+            Plugin.ChaufferLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
+            return;
+        }
+        Instance._extraPauseMenuButtons.Add(buttonToAdd);
     }
 
-    public void UpdateTexts(On.MenuV2Element.orig_UpdateTexts orig)
+    private void UpdateTexts(On.MenuV2Element.orig_UpdateTexts orig)
     {
-        Plugin.BepinLogger.LogDebug("update texts called");
+        Plugin.ChaufferLogger.LogDebug("update texts called");
         orig();
         if (CurrentMenu == null) return;
         var textAnimatorField =
@@ -262,9 +278,9 @@ public class MenuManager
         }
     }
 
-    public void MenuBack(On.MenuV2Script.orig_MenuBack orig, MenuV2Script self)
+    private void MenuBack(On.MenuV2Script.orig_MenuBack orig, MenuV2Script self)
     {
-        Plugin.BepinLogger.LogDebug("MenuBack called");
+        Plugin.ChaufferLogger.LogDebug("MenuBack called");
         if (CurrentMenu != null)
         {
             var voiceIndex = CurrentMenu.OrigVoiceIndex;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ModdedTaxiGoesVroom.Utils;
+namespace Chauffer.Utils;
 
 public class MenuButton
 {

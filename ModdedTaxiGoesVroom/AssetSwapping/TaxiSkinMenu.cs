@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using Chauffer.Utils;
 using ModdedTaxiGoesVroom.Managers;
-using ModdedTaxiGoesVroom.Utils;
 
 namespace ModdedTaxiGoesVroom.AssetSwapping;
 

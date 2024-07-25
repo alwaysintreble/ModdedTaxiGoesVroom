@@ -1,6 +1,6 @@
 ﻿using I2.Loc;
 
-namespace ModdedTaxiGoesVroom.Utils;
+namespace Chauffer.Utils;
 
 public class LocalizationHelper
 {

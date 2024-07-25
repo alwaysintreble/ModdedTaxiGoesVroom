@@ -1,5 +1,5 @@
-﻿using ModdedTaxiGoesVroom.Managers;
-using ModdedTaxiGoesVroom.Utils;
+﻿using Chauffer.Utils;
+using ModdedTaxiGoesVroom.Managers;
 
 namespace ModdedTaxiGoesVroom.Trainer;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ModdedTaxiGoesVroom.Utils;
+using Chauffer.Utils;
 
 namespace ModdedTaxiGoesVroom.Trainer;
 

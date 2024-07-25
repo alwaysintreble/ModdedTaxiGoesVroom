@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using ModdedTaxiGoesVroom.Managers;
+using Chauffer.Managers;
 
-namespace ModdedTaxiGoesVroom.Utils;
+namespace Chauffer.Utils;
 
 public class CustomMenu(string title, int startIndex = 0)
 {
@@ -19,7 +18,7 @@ public class CustomMenu(string title, int startIndex = 0)
     /// <param name="button"></param>
     public void AddButton(MenuButton button)
     {
-        Plugin.BepinLogger.LogDebug($"Registering button {button.GetText()}");
+        Plugin.ChaufferLogger.LogDebug($"Registering button {button.GetText()}");
         _buttons.Add(button);
     }
 
@@ -28,7 +27,7 @@ public class CustomMenu(string title, int startIndex = 0)
     /// </summary>
     public void LoadMenu(MenuV2Script instance)
     {
-        Plugin.BepinLogger.LogDebug($"loading menu {ToString()}");
+        Plugin.ChaufferLogger.LogDebug($"loading menu {ToString()}");
         _lastMenu = MenuManager.CurrentMenu;
         MenuManager.CurrentMenu = this;
         _origMenuIndex = instance.menuIndex;
@@ -56,7 +55,7 @@ public class CustomMenu(string title, int startIndex = 0)
         }
         catch (Exception e)
         {
-            Plugin.BepinLogger.LogError(e);
+            Plugin.ChaufferLogger.LogError(e);
         }
     }
 
@@ -88,20 +87,20 @@ public class CustomMenu(string title, int startIndex = 0)
     {
         try
         {
-            Plugin.BepinLogger.LogDebug($"Getting strings for {ToString()}");
-            List<string> list = new List<string>();
+            Plugin.ChaufferLogger.LogDebug($"Getting strings for {ToString()}");
+            List<string> buttonList = [];
             foreach (var button in _buttons)
             {
-                var text = button.GetText();
-                Plugin.BepinLogger.LogDebug(text);
-                if (button.IsEnabled()) list.Add(text);
+                var buttonText = button.GetText();
+                Plugin.ChaufferLogger.LogDebug(buttonText);
+                if (button.IsEnabled()) buttonList.Add(buttonText);
             }
 
-            return list.ToArray();
+            return buttonList.ToArray();
         }
         catch (Exception e)
         {
-            Plugin.BepinLogger.LogError(e);
+            Plugin.ChaufferLogger.LogError(e);
             return [$"{this}"];
         }
     }
@@ -120,7 +119,7 @@ public class CustomMenu(string title, int startIndex = 0)
             {
                 if (instance.voiceIndex == curIndex)
                 {
-                    Plugin.BepinLogger.LogDebug($"pressed {button.GetText()}");
+                    Plugin.ChaufferLogger.LogDebug($"pressed {button.GetText()}");
                     button.OnClick(instance);
                 }
 

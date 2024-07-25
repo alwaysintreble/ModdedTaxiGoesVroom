@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Chauffer.Managers;
+using Chauffer.Utils;
 using ModdedTaxiGoesVroom.AssetSwapping;
-using ModdedTaxiGoesVroom.Utils;
 using UnityEngine;
 
 namespace ModdedTaxiGoesVroom.Managers;
@@ -129,7 +130,7 @@ public class AssetManager
         try
         {
             var taxiSkinMenu = new TaxiSkinMenu();
-            MenuManager.Instance.AddMainMenuButton(new MenuButton("Change Taxi Skin", taxiSkinMenu.LoadMenu));
+            MenuManager.AddMainMenuButton(new MenuButton("Change Taxi Skin", taxiSkinMenu.LoadMenu));
         }
         catch (Exception e)
         {

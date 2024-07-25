@@ -1,5 +1,5 @@
-﻿using ModdedTaxiGoesVroom.Managers;
-using ModdedTaxiGoesVroom.Utils;
+﻿using Chauffer.Utils;
+using ModdedTaxiGoesVroom.Managers;
 
 namespace ModdedTaxiGoesVroom.Trainer;
 
@@ -16,7 +16,7 @@ public class TrainerMenu : CustomMenu
             _allLevelsUnlocked = false;
             break;
         }
-        AddButton(new MenuButton(() => _allLevelsUnlocked ? "Lock All Levels" : "Unlock All Levels", ToggleLockedLevels));
+        // AddButton(new MenuButton(() => _allLevelsUnlocked ? "Lock All Levels" : "Unlock All Levels", ToggleLockedLevels));
         AddButton(new MenuButton(() => Master.instance.DEBUG ? "Disable Debug" : "Enable Debug",
             () => Master.instance.DEBUG = !Master.instance.DEBUG));
         AddButton(new MenuButton(

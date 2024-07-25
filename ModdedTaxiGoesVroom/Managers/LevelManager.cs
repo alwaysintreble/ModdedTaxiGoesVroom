@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ModdedTaxiGoesVroom.Trainer;
-using ModdedTaxiGoesVroom.Utils;
 
 namespace ModdedTaxiGoesVroom.Managers;
 

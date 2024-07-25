@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace ModdedTaxiGoesVroom.Utils;
+namespace Chauffer.Utils;
 
 public class MenuHelpers
 {

@@ -2,14 +2,14 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Description>Modding Tools for Yellow Taxi Goes Vroom</Description>
+        <Description>Modding Framework for Yellow Taxi Goes Vroom</Description>
         <Version>0.1.0</Version>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <PackageId>ModdedTaxiGoesVroom</PackageId>
-        <RootNamespace>ModdedTaxiGoesVroom</RootNamespace>
+        <PackageId>Chauffeur</PackageId>
+        <RootNamespace>Chauffer</RootNamespace>
+        <AssemblyName>Chauffer</AssemblyName>
+<!--        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -27,30 +27,14 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
     </PropertyGroup>
-    
+
     <Target Name="Delete Extras" BeforeTargets="PostBuildEvent">
         <ItemGroup>
             <FilesToDelete Include="$(TargetDir)*"
-                           Exclude="$(TargetDir)$(ProjectName)*"/>
+                           Exclude="$(TargetDir)$(AssemblyName)*"/>
         </ItemGroup>
         <Delete Files="@(FilesToDelete)"/>
     </Target>
-
-    <Target Name="ZipMod" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <ZipDirectory SourceDirectory="bin\Release\$(TargetFramework)"
-                      DestinationFile="bin\Release\$(AssemblyName)-$(Version).zip"
-                      Overwrite="true"/>
-    </Target>
-
-    <ItemGroup>
-        <PackageReference Include="BepInEx.Analyzers" Version="1.0.8" PrivateAssets="all"/>
-        <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-        <PackageReference Include="UnityEngine.Modules" Version="2020.3.48" IncludeAssets="compile"/>
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-    </ItemGroup>
 
     <ItemGroup>
       <Reference Include="Assembly-CSharp">
@@ -65,9 +49,21 @@
       <Reference Include="Unity.TextMeshPro">
         <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Yellow Taxi Goes Vroom\Yellow Taxi Goes Vroom_Data\Managed\Unity.TextMeshPro.dll</HintPath>
       </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Yellow Taxi Goes Vroom\Yellow Taxi Goes Vroom_Data\Managed\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>..\..\..\Program Files (x86)\Steam\steamapps\common\Yellow Taxi Goes Vroom\Yellow Taxi Goes Vroom_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Chauffeur\Chauffeur.csproj" />
+      <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="BepInEx.Core" Version="5.4.21" />
+      <PackageReference Include="MonoMod" Version="22.7.31.1" />
     </ItemGroup>
+
 </Project>
