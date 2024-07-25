@@ -7,6 +7,7 @@ using ModdedTaxiGoesVroom.Trainer;
 
 namespace ModdedTaxiGoesVroom;
 
+[BepInDependency("com.alwaysintreble.Chauffer")]
 [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
 public class Plugin : BaseUnityPlugin
 {
