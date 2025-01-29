@@ -12,7 +12,8 @@ public class MenuHelpers
     /// <param name="prompt">Prompt details to provide for the user</param>
     /// <param name="input">Default text fill</param>
     /// <param name="canCancel">Whether the user can close the prompt without answering</param>
-    public static void TextInput(string title, Action<string> onConfirm, string prompt = "", string input = "", bool canCancel = true)
+    public static void TextInput(string title, Action<string> onConfirm, string prompt = "", string input = "",
+        bool canCancel = true)
     {
         var popup = MenuV2PopupScript.SpawnNew(title, "", prompt, canCancel);
         popup.inputField.text = input;

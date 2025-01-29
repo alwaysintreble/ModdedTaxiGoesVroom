@@ -10,7 +10,7 @@ public static class ReflectionHelper
     {
         return (T)o.GetType().GetField(fieldName, Flags)!.GetValue(o);
     }
-    
+
     public static void SetPrivateField(this object o, string fieldName, object value)
     {
         o.GetType().GetField(fieldName, Flags)!.SetValue(o, value);

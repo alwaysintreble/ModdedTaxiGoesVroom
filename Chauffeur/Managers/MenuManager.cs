@@ -11,7 +11,7 @@ public class MenuManager
     private readonly List<MenuButton> _extraMainMenuButtons = [];
     private readonly List<MenuButton> _extraPauseMenuButtons = [];
     public static MenuManager Instance;
-    public static CustomMenu CurrentMenu = null;
+    public static CustomMenu CurrentMenu;
 
     public MenuManager()
     {
@@ -26,8 +26,9 @@ public class MenuManager
         Instance = this;
         AddButtons?.Invoke();
     }
-    
+
     public static event AddButton AddButtons;
+
     public delegate void AddButton();
 
     private void MainMenuDefineVoiceIndexes(On.MenuV2Script.orig__MainMenuDefineVoiceIndexes orig, MenuV2Script self,
@@ -41,19 +42,19 @@ public class MenuManager
         {
             // 4 elements
             MenuV2Script.MainMenuKind.desktop_Normal or MenuV2Script.MainMenuKind.nonDesktop_Normal => 3 +
-                                                                             _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 5 elements
             MenuV2Script.MainMenuKind.desktop_WithCheats or MenuV2Script.MainMenuKind.nonDesktop_WithCheats => 4 +
                 _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 6 elements
             MenuV2Script.MainMenuKind.desktop_WithDiscordWishlistButtons
                 or MenuV2Script.MainMenuKind.nonDesktop_WithDiscordWishlistButtons => 5 +
-                                                                         _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 7 elements
             // can this even be hit?
             MenuV2Script.MainMenuKind.desktop_WIthDiscordWishlist_AndCheats
                 or MenuV2Script.MainMenuKind.nonDesktop_WIthDiscordWishlist_AndCheats => 6 +
-                                                                            _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                _extraMainMenuButtons.Count(button => button.IsEnabled()),
             _ => indexquit
         };
     }
@@ -94,7 +95,8 @@ public class MenuManager
                 if (self.voiceIndex >= 3 && self.voiceIndex < 3 + _extraMainMenuButtons.Count)
                 {
                     Sound.Play_Unpausable("SoundMenuSelect");
-                    foreach (var button in _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
+                    foreach (var button in
+                             _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
                         button.OnClick(self);
                     }
@@ -109,7 +111,8 @@ public class MenuManager
                 if (self.voiceIndex >= 4 && self.voiceIndex < 4 + _extraMainMenuButtons.Count)
                 {
                     Sound.Play_Unpausable("SoundMenuSelect");
-                    foreach (var button in _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
+                    foreach (var button in
+                             _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
                         button.OnClick(self);
                     }
@@ -124,7 +127,8 @@ public class MenuManager
                 if (self.voiceIndex >= 5 && self.voiceIndex < 5 + _extraMainMenuButtons.Count)
                 {
                     Sound.Play_Unpausable("SoundMenuSelect");
-                    foreach (var button in _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
+                    foreach (var button in
+                             _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
                         button.OnClick(self);
                     }
@@ -140,7 +144,8 @@ public class MenuManager
                 if (self.voiceIndex >= 6 && self.voiceIndex < 6 + _extraMainMenuButtons.Count)
                 {
                     Sound.Play_Unpausable("SoundMenuSelect");
-                    foreach (var button in _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
+                    foreach (var button in
+                             _extraMainMenuButtons.Where(button => self.voiceIndex == button.CurrentIndex))
                     {
                         button.OnClick(self);
                     }
@@ -245,6 +250,7 @@ public class MenuManager
             Plugin.ChaufferLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
             return;
         }
+
         Instance._extraMainMenuButtons.Add(buttonToAdd);
     }
 
@@ -255,6 +261,7 @@ public class MenuManager
             Plugin.ChaufferLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
             return;
         }
+
         Instance._extraPauseMenuButtons.Add(buttonToAdd);
     }
 

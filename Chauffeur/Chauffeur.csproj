@@ -63,7 +63,10 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="BepInEx.Core" Version="5.4.21" />
-      <PackageReference Include="MonoMod" Version="22.7.31.1" />
+      <PackageReference Include="UnityEngine.Modules" Version="2020.3.48">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>

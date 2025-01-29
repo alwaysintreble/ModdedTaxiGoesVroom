@@ -20,6 +20,7 @@ public class ChaufferLog : ILogListener, IDisposable
             Plugin.ChaufferLogger.LogError($"unable to open {path}");
             return;
         }
+
         LogWriter = TextWriter.Synchronized(new StreamWriter(fileStream, BepInEx.Utility.UTF8NoBom));
         FlushTimer = new Timer(_ => LogWriter?.Flush(), null, 2000, 2000);
     }

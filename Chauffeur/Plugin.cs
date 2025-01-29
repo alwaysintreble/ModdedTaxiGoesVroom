@@ -18,10 +18,9 @@ public class Plugin : BaseUnityPlugin
     public const string ModDisplayInfo = $"{PluginName} v{PluginVersion}";
     public static ManualLogSource ChaufferLogger;
     private string _logDirectory;
-    
+
     private void Awake()
     {
-        
         ChaufferLogger = Logger;
         var config = new ChaufferConfiguration();
         try
@@ -48,6 +47,7 @@ public class Plugin : BaseUnityPlugin
         {
             ChaufferLogger.LogError(e);
         }
+
         ChaufferLogger.LogMessage($"{ModDisplayInfo} loaded!");
         On.ModMaster.Start += (orig, self) =>
         {
