@@ -6,9 +6,16 @@
         <Version>0.1.0</Version>
         <LangVersion>latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <PackageId>Chauffeur</PackageId>
+        <PackageId>com.alwaysintreble.Chauffeur</PackageId>
         <RootNamespace>Chauffeur</RootNamespace>
         <AssemblyName>Chauffeur</AssemblyName>
+        <Title>Chauffeur</Title>
+        <Authors>alwaysintreble</Authors>
+        <PackageProjectUrl>https://github.com/alwaysintreble/Chauffeur</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/alwaysintreble/Chauffeur</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 <!--        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
     </PropertyGroup>
 
@@ -69,4 +76,8 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath=""/>
+        <None Include="LICENSE" Pack="true" PackagePath=""/>
+    </ItemGroup>
 </Project>
