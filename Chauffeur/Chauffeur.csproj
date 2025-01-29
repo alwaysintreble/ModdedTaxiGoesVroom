@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <Description>Modding Framework for Yellow Taxi Goes Vroom</Description>
-        <Version>0.1.1</Version>
+        <Version>0.2.0</Version>
         <LangVersion>latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <PackageId>com.alwaysintreble.Chauffeur</PackageId>
