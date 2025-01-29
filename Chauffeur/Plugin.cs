@@ -17,7 +17,6 @@ public class Plugin : BaseUnityPlugin
     public const string PluginVersion = "0.1.0";
 
     public const string ModDisplayInfo = $"{PluginName} v{PluginVersion}";
-    public static ManualLogSource ChauffeurLogger;
     private string _logDirectory;
 
     private void Awake()
@@ -55,6 +54,12 @@ public class Plugin : BaseUnityPlugin
             self.ModEnableSet(true);
             orig(self);
             var menuManager = new MenuManager();
+        };
+
+        MenuManager.AddButtons += () =>
+        {
+            var modsMenu = new InstalledModsMenu();
+            MenuManager.AddPauseMenuButton(new MenuButton("Installed Mods", modsMenu.LoadMenu));
         };
     }
 }
