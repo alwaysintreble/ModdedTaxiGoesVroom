@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModdedTaxiGoesVroom", "ModdedTaxiGoesVroom\ModdedTaxiGoesVroom.csproj", "{C47BC870-A13D-47ED-8764-FA02C22A575B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chauffeur", "Chauffeur\Chauffeur.csproj", "{3AEF2E01-0EB2-4EDD-8843-CC4CD892EE48}"
 EndProject
 Global
