@@ -11,13 +11,15 @@ public class ChauffeurLog : ILogListener, IDisposable
     public TextWriter LogWriter;
     public Timer FlushTimer;
 
+    public static ManualLogSource ChauffeurLogger;
+
     public ChauffeurLog(string path, LogLevel logLevel)
     {
         DisplayedLogLevel = logLevel;
         FileStream fileStream;
         if (!BepInEx.Utility.TryOpenFileStream(path, FileMode.Create, out fileStream, FileAccess.Write))
         {
-            Plugin.ChauffeurLogger.LogError($"unable to open {path}");
+            ChauffeurLogger.LogError($"unable to open {path}");
             return;
         }
 

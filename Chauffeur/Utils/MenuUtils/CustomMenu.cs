@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Chauffeur.Managers;
 
-namespace Chauffeur.Utils;
+namespace Chauffeur.Utils.MenuUtils;
 
 public class CustomMenu(string title, int startIndex = 0)
 {
@@ -18,7 +18,7 @@ public class CustomMenu(string title, int startIndex = 0)
     /// <param name="button"></param>
     public void AddButton(MenuButton button)
     {
-        Plugin.ChauffeurLogger.LogDebug($"Registering button {button.GetText()}");
+        ChauffeurLog.ChauffeurLogger.LogDebug($"Registering button {button.GetText()}");
         _buttons.Add(button);
     }
 
@@ -27,7 +27,7 @@ public class CustomMenu(string title, int startIndex = 0)
     /// </summary>
     public void LoadMenu(MenuV2Script instance)
     {
-        Plugin.ChauffeurLogger.LogDebug($"loading menu {ToString()}");
+        ChauffeurLog.ChauffeurLogger.LogDebug($"loading menu {ToString()}");
         _lastMenu = MenuManager.CurrentMenu;
         MenuManager.CurrentMenu = this;
         _origMenuIndex = instance.menuIndex;
@@ -55,7 +55,7 @@ public class CustomMenu(string title, int startIndex = 0)
         }
         catch (Exception e)
         {
-            Plugin.ChauffeurLogger.LogError(e);
+            ChauffeurLog.ChauffeurLogger.LogError(e);
         }
     }
 
@@ -87,12 +87,12 @@ public class CustomMenu(string title, int startIndex = 0)
     {
         try
         {
-            Plugin.ChauffeurLogger.LogDebug($"Getting strings for {ToString()}");
+            ChauffeurLog.ChauffeurLogger.LogDebug($"Getting strings for {ToString()}");
             List<string> buttonList = [];
             foreach (var button in _buttons)
             {
                 var buttonText = button.GetText();
-                Plugin.ChauffeurLogger.LogDebug(buttonText);
+                ChauffeurLog.ChauffeurLogger.LogDebug(buttonText);
                 if (button.IsEnabled()) buttonList.Add(buttonText);
             }
 
@@ -100,7 +100,7 @@ public class CustomMenu(string title, int startIndex = 0)
         }
         catch (Exception e)
         {
-            Plugin.ChauffeurLogger.LogError(e);
+            ChauffeurLog.ChauffeurLogger.LogError(e);
             return [$"{this}"];
         }
     }
@@ -119,7 +119,7 @@ public class CustomMenu(string title, int startIndex = 0)
             {
                 if (instance.voiceIndex == curIndex)
                 {
-                    Plugin.ChauffeurLogger.LogDebug($"pressed {button.GetText()}");
+                    ChauffeurLog.ChauffeurLogger.LogDebug($"pressed {button.GetText()}");
                     button.OnClick(instance);
                 }
 

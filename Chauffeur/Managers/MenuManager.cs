@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Chauffeur.Utils;
+using Chauffeur.Utils.MenuUtils;
 using Febucci.UI;
 
 namespace Chauffeur.Managers;
@@ -42,19 +43,19 @@ public class MenuManager
         {
             // 4 elements
             MenuV2Script.MainMenuKind.desktop_Normal or MenuV2Script.MainMenuKind.nonDesktop_Normal => 3 +
-                _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                             _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 5 elements
             MenuV2Script.MainMenuKind.desktop_WithCheats or MenuV2Script.MainMenuKind.nonDesktop_WithCheats => 4 +
                 _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 6 elements
             MenuV2Script.MainMenuKind.desktop_WithDiscordWishlistButtons
                 or MenuV2Script.MainMenuKind.nonDesktop_WithDiscordWishlistButtons => 5 +
-                _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                         _extraMainMenuButtons.Count(button => button.IsEnabled()),
             // 7 elements
             // can this even be hit?
             MenuV2Script.MainMenuKind.desktop_WIthDiscordWishlist_AndCheats
                 or MenuV2Script.MainMenuKind.nonDesktop_WIthDiscordWishlist_AndCheats => 6 +
-                _extraMainMenuButtons.Count(button => button.IsEnabled()),
+                                                                            _extraMainMenuButtons.Count(button => button.IsEnabled()),
             _ => indexquit
         };
     }
@@ -247,7 +248,7 @@ public class MenuManager
     {
         if (Instance == null)
         {
-            Plugin.ChauffeurLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
+            ChauffeurLog.ChauffeurLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
             return;
         }
 
@@ -258,7 +259,7 @@ public class MenuManager
     {
         if (Instance == null)
         {
-            Plugin.ChauffeurLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
+            ChauffeurLog.ChauffeurLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
             return;
         }
 
@@ -267,7 +268,7 @@ public class MenuManager
 
     private void UpdateTexts(On.MenuV2Element.orig_UpdateTexts orig)
     {
-        Plugin.ChauffeurLogger.LogDebug("update texts called");
+        ChauffeurLog.ChauffeurLogger.LogDebug("update texts called");
         orig();
         if (CurrentMenu == null) return;
         var textAnimatorField =
@@ -287,7 +288,7 @@ public class MenuManager
 
     private void MenuBack(On.MenuV2Script.orig_MenuBack orig, MenuV2Script self)
     {
-        Plugin.ChauffeurLogger.LogDebug("MenuBack called");
+        ChauffeurLog.ChauffeurLogger.LogDebug("MenuBack called");
         if (CurrentMenu != null)
         {
             var voiceIndex = CurrentMenu.OrigVoiceIndex;

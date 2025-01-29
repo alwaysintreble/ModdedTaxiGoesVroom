@@ -2,9 +2,10 @@
 using System.IO;
 using System.Linq;
 using BepInEx;
-using BepInEx.Logging;
 using Chauffeur.Managers;
+using Chauffeur.Menus;
 using Chauffeur.Utils;
+using Chauffeur.Utils.MenuUtils;
 
 namespace Chauffeur;
 
@@ -21,12 +22,12 @@ public class Plugin : BaseUnityPlugin
 
     private void Awake()
     {
-        ChauffeurLogger = Logger;
+        ChauffeurLog.ChauffeurLogger = Logger;
         var config = new ChauffeurConfiguration();
         try
         {
             _logDirectory = Path.Combine(Path.GetDirectoryName(Paths.ExecutablePath), "ChauffeurLogs");
-            ChauffeurLogger.LogDebug(_logDirectory);
+            ChauffeurLog.ChauffeurLogger.LogDebug(_logDirectory);
             if (!Directory.Exists(_logDirectory))
             {
                 Directory.CreateDirectory(_logDirectory);
@@ -45,10 +46,10 @@ public class Plugin : BaseUnityPlugin
         }
         catch (Exception e)
         {
-            ChauffeurLogger.LogError(e);
+            ChauffeurLog.ChauffeurLogger.LogError(e);
         }
 
-        ChauffeurLogger.LogMessage($"{ModDisplayInfo} loaded!");
+        ChauffeurLog.ChauffeurLogger.LogMessage($"{ModDisplayInfo} loaded!");
         On.ModMaster.Start += (orig, self) =>
         {
             self.ModEnableSet(true);
