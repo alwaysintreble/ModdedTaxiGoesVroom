@@ -3,21 +3,21 @@ using System.IO;
 using System.Threading;
 using BepInEx.Logging;
 
-namespace Chauffer.Utils;
+namespace Chauffeur.Utils;
 
-public class ChaufferLog : ILogListener, IDisposable
+public class ChauffeurLog : ILogListener, IDisposable
 {
     public LogLevel DisplayedLogLevel;
     public TextWriter LogWriter;
     public Timer FlushTimer;
 
-    public ChaufferLog(string path, LogLevel logLevel)
+    public ChauffeurLog(string path, LogLevel logLevel)
     {
         DisplayedLogLevel = logLevel;
         FileStream fileStream;
         if (!BepInEx.Utility.TryOpenFileStream(path, FileMode.Create, out fileStream, FileAccess.Write))
         {
-            Plugin.ChaufferLogger.LogError($"unable to open {path}");
+            Plugin.ChauffeurLogger.LogError($"unable to open {path}");
             return;
         }
 
@@ -39,5 +39,5 @@ public class ChaufferLog : ILogListener, IDisposable
         LogWriter?.Dispose();
     }
 
-    ~ChaufferLog() => Dispose();
+    ~ChauffeurLog() => Dispose();
 }

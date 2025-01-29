@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chauffer.Utils;
+namespace Chauffeur.Utils;
 
 public class MenuButton
 {

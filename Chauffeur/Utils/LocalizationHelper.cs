@@ -1,6 +1,6 @@
 ﻿using I2.Loc;
 
-namespace Chauffer.Utils;
+namespace Chauffeur.Utils;
 
 public class LocalizationHelper
 {

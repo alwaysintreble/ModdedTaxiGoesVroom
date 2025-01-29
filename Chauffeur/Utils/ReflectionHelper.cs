@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Chauffer.Utils;
+namespace Chauffeur.Utils;
 
 public static class ReflectionHelper
 {

@@ -3,30 +3,30 @@ using System.IO;
 using System.Linq;
 using BepInEx;
 using BepInEx.Logging;
-using Chauffer.Managers;
-using Chauffer.Utils;
+using Chauffeur.Managers;
+using Chauffeur.Utils;
 
-namespace Chauffer;
+namespace Chauffeur;
 
 [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
 public class Plugin : BaseUnityPlugin
 {
-    public const string PluginGuid = "com.alwaysintreble.Chauffer";
-    public const string PluginName = "Chauffer";
+    public const string PluginGuid = "com.alwaysintreble.Chauffeur";
+    public const string PluginName = "Chauffeur";
     public const string PluginVersion = "0.1.0";
 
     public const string ModDisplayInfo = $"{PluginName} v{PluginVersion}";
-    public static ManualLogSource ChaufferLogger;
+    public static ManualLogSource ChauffeurLogger;
     private string _logDirectory;
 
     private void Awake()
     {
-        ChaufferLogger = Logger;
-        var config = new ChaufferConfiguration();
+        ChauffeurLogger = Logger;
+        var config = new ChauffeurConfiguration();
         try
         {
-            _logDirectory = Path.Combine(Path.GetDirectoryName(Paths.ExecutablePath), "ChaufferLogs");
-            ChaufferLogger.LogDebug(_logDirectory);
+            _logDirectory = Path.Combine(Path.GetDirectoryName(Paths.ExecutablePath), "ChauffeurLogs");
+            ChauffeurLogger.LogDebug(_logDirectory);
             if (!Directory.Exists(_logDirectory))
             {
                 Directory.CreateDirectory(_logDirectory);
@@ -39,16 +39,16 @@ public class Plugin : BaseUnityPlugin
                 oldestLog?.Delete();
             }
 
-            var logPath = Path.Combine(_logDirectory, $"Chauffer{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.log");
-            BepInEx.Logging.Logger.Listeners.Add(new ChaufferLog(logPath,
+            var logPath = Path.Combine(_logDirectory, $"Chauffeur{DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss")}.log");
+            BepInEx.Logging.Logger.Listeners.Add(new ChauffeurLog(logPath,
                 config.LogLevel));
         }
         catch (Exception e)
         {
-            ChaufferLogger.LogError(e);
+            ChauffeurLogger.LogError(e);
         }
 
-        ChaufferLogger.LogMessage($"{ModDisplayInfo} loaded!");
+        ChauffeurLogger.LogMessage($"{ModDisplayInfo} loaded!");
         On.ModMaster.Start += (orig, self) =>
         {
             self.ModEnableSet(true);

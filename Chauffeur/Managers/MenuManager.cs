@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Chauffer.Utils;
+using Chauffeur.Utils;
 using Febucci.UI;
 
-namespace Chauffer.Managers;
+namespace Chauffeur.Managers;
 
 public class MenuManager
 {
@@ -247,7 +247,7 @@ public class MenuManager
     {
         if (Instance == null)
         {
-            Plugin.ChaufferLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
+            Plugin.ChauffeurLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
             return;
         }
 
@@ -258,7 +258,7 @@ public class MenuManager
     {
         if (Instance == null)
         {
-            Plugin.ChaufferLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
+            Plugin.ChauffeurLogger.LogError($"Attempted to add {buttonToAdd} before menu manager was instantiated");
             return;
         }
 
@@ -267,7 +267,7 @@ public class MenuManager
 
     private void UpdateTexts(On.MenuV2Element.orig_UpdateTexts orig)
     {
-        Plugin.ChaufferLogger.LogDebug("update texts called");
+        Plugin.ChauffeurLogger.LogDebug("update texts called");
         orig();
         if (CurrentMenu == null) return;
         var textAnimatorField =
@@ -287,7 +287,7 @@ public class MenuManager
 
     private void MenuBack(On.MenuV2Script.orig_MenuBack orig, MenuV2Script self)
     {
-        Plugin.ChaufferLogger.LogDebug("MenuBack called");
+        Plugin.ChauffeurLogger.LogDebug("MenuBack called");
         if (CurrentMenu != null)
         {
             var voiceIndex = CurrentMenu.OrigVoiceIndex;

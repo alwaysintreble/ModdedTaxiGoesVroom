@@ -7,8 +7,8 @@
         <LangVersion>latest</LangVersion>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <PackageId>Chauffeur</PackageId>
-        <RootNamespace>Chauffer</RootNamespace>
-        <AssemblyName>Chauffer</AssemblyName>
+        <RootNamespace>Chauffeur</RootNamespace>
+        <AssemblyName>Chauffeur</AssemblyName>
 <!--        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>-->
     </PropertyGroup>
 
